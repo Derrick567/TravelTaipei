@@ -1,18 +1,15 @@
 package com.example.traveltaipei.home.presentation
 
-import android.util.Log
+import android.os.Parcelable
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,9 +19,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -32,34 +32,41 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontVariation.width
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.traveltaipei.R
-import com.example.traveltaipei.home.data.remote.dto.Image
 import com.example.traveltaipei.home.data.remote.dto.News
 import com.example.traveltaipei.home.model.Attraction
 import com.example.traveltaipei.ui.theme.Pink40
+import com.example.traveltaipei.ui.theme.Purple40
+import com.example.traveltaipei.ui.theme.PurpleGrey40
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = viewModel(), onNavigate: (String, Int) -> Unit) {
-    val state by homeViewModel.uiState.collectAsState()
+fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
+               onAttractionNavigate: (Int, Parcelable?) -> Unit
+               , onNewsNavigate: (String) -> Unit) {
+
+    val newsList by homeViewModel.news
+    val attractions by homeViewModel.attractions
     val context = LocalContext.current
+    val openLanguageDialog = remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,29 +75,57 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(), onNavigate: (String, 
                     titleContentColor = Pink40,
                 ),
                 title = {
-                    Text(text = "悠遊台北", style = TextStyle(color = Color.White, fontSize =28.sp))
-                }
+                    Text(
+                        text = "悠遊台北",
+                        style = TextStyle(color = Color.White, fontSize = 28.sp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                },
+                actions = {
+                    IconButton(onClick = { openLanguageDialog.value = true }) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                },
             )
         },
     ) { innerPadding ->
-
-        Spacer(modifier = Modifier.height(36.dp))
+        if (openLanguageDialog.value) {
+            LanguageDialog(
+                onDismissRequest = { openLanguageDialog.value = false },
+                langs = homeViewModel.langs, currentLanguage = homeViewModel.currentLanguage,
+                onItemClick = {lang ->
+                    homeViewModel.changeCurrentLanguage(lang)
+                    openLanguageDialog.value = false
+                    homeViewModel.getAttractions()
+                    homeViewModel.getNews()
+                    Toast.makeText(context, lang, Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
+            item { Box(modifier = Modifier.fillMaxWidth().height(50.dp))}
+
             item {
                 ListTitle("最新消息")
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
 
-            items(state.newsList) { news ->
+            items(newsList) { news ->
                 NewsItem(
                     news = news,
                     onItemClick = {
-
+                        onNewsNavigate(news.url)
+                        //onNavigate(R.id.action_home_fragment_to_attraction_fragment, news)
                         Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
                     }
                 )
@@ -100,11 +135,11 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(), onNavigate: (String, 
                 ListTitle("旅遊景點")
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
-            items(state.attractions) { attraction ->
+            items(attractions) { attraction ->
                 AttractionItem(
                     attraction = attraction,
                     onItemClick = {
-                        onNavigate("attraction", attraction.id)
+                        onAttractionNavigate(R.id.action_home_fragment_to_attraction_fragment, attraction)
                         Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
                     }
                 )
@@ -114,7 +149,6 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(), onNavigate: (String, 
 
 
 }
-
 @Composable
 fun ListTitle(title: String) {
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -249,6 +283,60 @@ fun AttractionItem(attraction: Attraction, onItemClick: () -> Unit) {
         }
     }
 }
+
+@Composable
+fun LanguageDialog(
+    onDismissRequest: () -> Unit,
+    langs: List<Pair<String, String>> = emptyList(),
+    currentLanguage: String,
+    onItemClick: (String) -> Unit
+) {
+    Dialog(onDismissRequest = { onDismissRequest() }) {
+        // Draw a rectangle shape with rounded corners inside the dialog
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(450.dp),
+
+        ) {
+            LazyColumn(modifier = Modifier.padding(16.dp)) {
+
+                item {
+                    Text(
+                        text = "選擇語言",
+                        modifier = Modifier.fillMaxWidth(),
+                        fontSize = 24.sp
+                    )
+                }
+
+                items(langs) { (text, value) ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(
+                                if (currentLanguage == value) Modifier.background(
+                                    PurpleGrey40,
+                                    shape = RoundedCornerShape(8.dp)
+                                ) else Modifier
+                            )
+                            .clickable { onItemClick(value) }
+                            .padding(16.dp),
+                    ) {
+                        Text(
+                            text = text, modifier = Modifier,
+                            style = TextStyle(
+                                color = Color.Black, fontSize = 16.sp,
+                                ), textAlign = TextAlign.Start
+                        )
+                    }
+
+
+                }
+            }
+        }
+    }
+}
+
 
 @Preview
 @Composable

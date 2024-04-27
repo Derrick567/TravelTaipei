@@ -8,26 +8,30 @@ import android.view.ViewGroup
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.example.ApiClient
 import com.example.traveltaipei.R
-import com.example.traveltaipei.home.data.remote.dto.AttractionsResult
-import com.example.traveltaipei.home.data.remote.dto.NewsResult
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.traveltaipei.home.model.Attraction
 
 /**
  * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
+ * Use the [AttractionFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class AttractionFragment : Fragment() {
+    //private var id: Int? = null
+    private val viewModel: AttractionViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            //id = it.getInt(ATTRACTION_ID)
+            it.getParcelable<Attraction>("attraction")?.let { attraction ->
+                viewModel.attraction =  attraction
+            }
+            Log.d("AttractionFragment", "id = $id")
+        }
     }
 
     override fun onCreateView(
@@ -37,21 +41,15 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         val composeView = view.findViewById<ComposeView>(R.id.compose_view)
         composeView.apply {
-            // Dispose of the Composition when the view's LifecycleOwner
-            // is destroyed
+
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 // In Compose world
                 MaterialTheme {
-                    HomeScreen(onAttractionNavigate = { actionId, par ->
-                        val bundle = Bundle()
-                        bundle.putParcelable("attraction", par)
-                        findNavController().navigate(actionId, bundle)
-
-                    }, onNewsNavigate = { url ->
-                        val navDirect = HomeFragmentDirections.homeFragmentToWebviewFragment(url)
-                        findNavController().navigate(navDirect)
-                    })
+                    AttractionScreen(onBack = {activity?.supportFragmentManager?.popBackStack()}
+                    , onUrlClick = { url ->
+                        val navDirect = AttractionFragmentDirections.attractionFragmentToWebviewFragment(url)
+                        findNavController().navigate(navDirect)})
                 }
             }
         }
@@ -61,11 +59,5 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) = HomeFragment()
     }
 }
