@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -76,7 +77,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
                 ),
                 title = {
                     Text(
-                        text = "悠遊台北",
+                        text = stringResource(id = R.string.home_title),
                         style = TextStyle(color = Color.White, fontSize = 28.sp),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -101,9 +102,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
                 onItemClick = {lang ->
                     homeViewModel.changeCurrentLanguage(lang)
                     openLanguageDialog.value = false
-                    homeViewModel.getAttractions()
-                    homeViewModel.getNews()
-                    Toast.makeText(context, lang, Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, lang, Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -113,10 +112,12 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            item { Box(modifier = Modifier.fillMaxWidth().height(50.dp))}
+            item { Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp))}
 
             item {
-                ListTitle("最新消息")
+                ListTitle(stringResource(R.string.home_news_title))
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
 
@@ -132,7 +133,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item {
-                ListTitle("旅遊景點")
+                ListTitle(stringResource(R.string.home_attraction_title))
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             items(attractions) { attraction ->

@@ -1,12 +1,14 @@
 package com.example.traveltaipei.home.presentation
 
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import com.example.ApiClient
@@ -22,7 +24,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel : ViewModel() {
 
     val TAG = "MainViewModel--"
     private var _news = mutableStateOf<List<News>>(emptyList())
@@ -31,7 +33,7 @@ class HomeViewModel: ViewModel() {
     private var _attractions = mutableStateOf<List<Attraction>>(emptyList())
     val attractions: State<List<Attraction>> = _attractions
 
-//    private val _uiState = MutableStateFlow(HomeUiState())
+    //    private val _uiState = MutableStateFlow(HomeUiState())
 //    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
     val langs = listOf(
         Pair("正體中文", "zh-tw"),
@@ -42,7 +44,7 @@ class HomeViewModel: ViewModel() {
         Pair("西班牙文", "es"),
         Pair("印尼文", "id")
     )
-    var currentLanguage by  mutableStateOf("zh-tw")
+    var currentLanguage by mutableStateOf("zh-tw")
         private set
 
     init {
@@ -50,9 +52,20 @@ class HomeViewModel: ViewModel() {
         getNews()
     }
 
-    fun changeCurrentLanguage(lang: String){
+    fun changeCurrentLanguage(lang: String) {
         currentLanguage = lang
+        getAttractions()
+        getNews()
+        setLocale(lang)
     }
+
+    private fun setLocale(lang: String) {
+        val appLocale: LocaleListCompat =
+            LocaleListCompat.forLanguageTags(lang)
+        // Call this on the main thread as it may require Activity.restart()
+        AppCompatDelegate.setApplicationLocales(appLocale)
+    }
+
     fun getNews() {
         val call2 = ApiClient.apiService.getNews(currentLanguage)
         call2.enqueue(object : Callback<NewsResult> {
@@ -87,9 +100,9 @@ class HomeViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     val attractionsResult = response.body()
                     if (attractionsResult != null) {
-                            attractionsResult.attractions.take(6).let {
-                                _attractions.value = it
-                            }
+                        attractionsResult.attractions.take(6).let {
+                            _attractions.value = it
+                        }
 
                     }
 

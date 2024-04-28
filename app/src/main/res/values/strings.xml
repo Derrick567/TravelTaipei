@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">TravelTaipei</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_title">優遊台北</string>
+    <string name="home_news_title">最新消息</string>
+    <string name="home_attraction_title">旅遊景點</string>
 </resources>
