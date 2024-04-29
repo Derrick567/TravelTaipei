@@ -1,4 +1,4 @@
-package com.example.traveltaipei.home.data.remote.dto
+package com.example.traveltaipei.home.model.remote.dto
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

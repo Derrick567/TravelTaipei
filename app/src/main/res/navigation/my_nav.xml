@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/home_fragment"
-        android:name="com.example.traveltaipei.home.presentation.HomeFragment"
+        android:name="com.example.traveltaipei.home.view.HomeFragment"
         tools:layout="@layout/fragment_home">
 
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/attraction_fragment"
-        android:name="com.example.traveltaipei.home.presentation.AttractionFragment"
+        android:name="com.example.traveltaipei.attraction.view.AttractionFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_attraction">
         <action
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/webview_fragment"
-        android:name="com.example.traveltaipei.home.presentation.WebViewFragment"
+        android:name="com.example.traveltaipei.home.view.WebViewFragment"
         android:label="WebViewFragment"
         tools:layout="@layout/fragment_web_view">
 

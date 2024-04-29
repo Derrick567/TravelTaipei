@@ -1,28 +1,23 @@
-package com.example.traveltaipei.home.presentation
+package com.example.traveltaipei.home.viewmodel
 
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import com.example.ApiClient
-import com.example.traveltaipei.home.data.remote.dto.AttractionsResult
-import com.example.traveltaipei.home.data.remote.dto.News
-import com.example.traveltaipei.home.data.remote.dto.NewsResult
+import com.example.traveltaipei.home.model.remote.dto.AttractionsResult
+import com.example.traveltaipei.home.model.remote.dto.News
+import com.example.traveltaipei.home.model.remote.dto.NewsResult
 import com.example.traveltaipei.home.model.Attraction
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
+
 
 class HomeViewModel : ViewModel() {
 
@@ -48,9 +43,11 @@ class HomeViewModel : ViewModel() {
         private set
 
     init {
+        currentLanguage = Locale.getDefault().language
         getAttractions()
         getNews()
     }
+
 
     fun changeCurrentLanguage(lang: String) {
         currentLanguage = lang
@@ -99,11 +96,8 @@ class HomeViewModel : ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     val attractionsResult = response.body()
-                    if (attractionsResult != null) {
-                        attractionsResult.attractions.take(6).let {
-                            _attractions.value = it
-                        }
-
+                    attractionsResult?.attractions?.take(6)?.let {
+                        _attractions.value = it
                     }
 
 

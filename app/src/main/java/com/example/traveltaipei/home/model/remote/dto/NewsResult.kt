@@ -1,4 +1,4 @@
-package com.example.traveltaipei.home.data.remote.dto
+package com.example.traveltaipei.home.model.remote.dto
 
 import com.google.gson.annotations.SerializedName
 

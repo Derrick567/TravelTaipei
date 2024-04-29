@@ -1,4 +1,4 @@
-package com.example.traveltaipei.home.data.remote.dto
+package com.example.traveltaipei.home.model.remote.dto
 
 data class Category(
     val id: Int,

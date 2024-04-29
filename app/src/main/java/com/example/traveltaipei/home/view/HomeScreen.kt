@@ -1,7 +1,6 @@
-package com.example.traveltaipei.home.presentation
+package com.example.traveltaipei.home.view
 
 import android.os.Parcelable
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,7 +29,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,10 +49,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.traveltaipei.R
-import com.example.traveltaipei.home.data.remote.dto.News
+import com.example.traveltaipei.home.model.remote.dto.News
 import com.example.traveltaipei.home.model.Attraction
+import com.example.traveltaipei.home.viewmodel.HomeViewModel
 import com.example.traveltaipei.ui.theme.Pink40
-import com.example.traveltaipei.ui.theme.Purple40
 import com.example.traveltaipei.ui.theme.PurpleGrey40
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -127,7 +125,6 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
                     onItemClick = {
                         onNewsNavigate(news.url)
                         //onNavigate(R.id.action_home_fragment_to_attraction_fragment, news)
-                        Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -141,7 +138,6 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
                     attraction = attraction,
                     onItemClick = {
                         onAttractionNavigate(R.id.action_home_fragment_to_attraction_fragment, attraction)
-                        Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -348,7 +344,7 @@ fun Preview1() {
         description = "臺北市觀光活動補助一年共兩期，第2期即將於112年4月1日至4月30日開放申請，對象為112年7月至12月在臺北市舉辦之活動。台北市政府觀光傳播局1日表示，為促進公私協力、共同辦理特色活動吸引旅客到台北，並配合北市永續政策方向，今年將針對結合「循環永續、低碳」概念辦理的觀光活動，或是結合市府跨年、夏日節等指標活動，以及能串聯地方特色的民間活動等優先提供補助，歡迎民間單位共同參與響應。\r\n\r\n▲北市觀光活動補助4/1起開放受理，歡迎具地方特色之民間觀光活動提出申請。(圖片來源：臺北市政府觀光傳播局)\r\n\r\n\r\n觀傳局說明，此次觀光活動補助申請案，如配合以下市府施政重點（詳情請查第2期臺北市觀光活動補助公告）且具「永續辦理」之性質者，將列為優先補助對象：\r\n1.結合本府指標性活動：響應本府大型活動，如：花系列活動、台北夏日系列活動、跨年活動等。\r\n2.串聯觀光產業方案：於臺北市辦理特色活動（如：創意市集、主題活動等）並結合旅遊（宿）業、商圈或臺北市雙層觀光巴士等相關觀光產業。\r\n3.提出含有美食文化、夜間觀光或多日型之主題活動。\r\n4.推廣地方特色場域，如：以北藝中心、北流中心、松菸、貓空、臺北大縱走等主題場域，規劃特色活動或相關體驗，以吸引民眾常態性參與並促進地方觀光人潮及產業活絡。\r\n5.推廣綠色旅遊：響應全球淨零排放目標，結合「循環永續、低碳」概念辦理觀光活動。\r\n\r\n▲今年觀光活動補助將優先補助結合本府施政重點，並能常年辦理的項目。(圖片來源：臺北市政府觀光傳播局)\r\n\r\n觀傳局特別提醒，提案單位須編列自籌款50%以上，且本次審查項目及標準中，「行銷宣傳」將佔比30%，以鼓勵申請單位著重活動行銷宣傳，吸引遊客來臺北參與活動。此外，隨e化消費普及，補助案活動有開放交易者，應導入無現金交易措施，提供民眾多元便利的金流。\r\n\r\n觀傳局說，北市觀光活動補助每年分2期，補助對象為民間單位於臺北市境內辦理的觀光活動，凡在臺北市舉辦，主題以民俗、節慶或其他足以彰顯地方特色，並可促進臺北市觀光發展、增加北市觀光人潮的觀光活動，均可依規定於期限內提出申請，實際補助金額將經審查結果訂定。有意申請的單位，申請資格及方式情詳見「第2期臺北市觀光活動補助公告」，" +
                 "並請於112年4月1日至4月30日至「市民服務大平臺」網站，依機關分類至觀光傳播局，即可查詢臺北市觀光活動補助相關內容"
     ), onItemClick = {
-        Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
+
     })
 //    AttractionItem(
 //        attraction = Attraction(

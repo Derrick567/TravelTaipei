@@ -1,7 +1,7 @@
-package com.example.traveltaipei.home.data.remote
+package com.example.traveltaipei.home.model.remote
 
-import com.example.traveltaipei.home.data.remote.dto.AttractionsResult
-import com.example.traveltaipei.home.data.remote.dto.NewsResult
+import com.example.traveltaipei.home.model.remote.dto.AttractionsResult
+import com.example.traveltaipei.home.model.remote.dto.NewsResult
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers

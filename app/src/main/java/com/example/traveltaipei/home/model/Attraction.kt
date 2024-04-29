@@ -1,10 +1,8 @@
 package com.example.traveltaipei.home.model
 
 import android.os.Parcelable
-import com.example.traveltaipei.home.data.remote.dto.Category
-import com.example.traveltaipei.home.data.remote.dto.Image
-import com.example.traveltaipei.home.data.remote.dto.LinkX
-import com.example.traveltaipei.home.data.remote.dto.Service
+import com.example.traveltaipei.home.model.remote.dto.Category
+import com.example.traveltaipei.home.model.remote.dto.Image
 import kotlinx.android.parcel.Parcelize
 import kotlinx.parcelize.RawValue
 

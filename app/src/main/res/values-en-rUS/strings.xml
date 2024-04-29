@@ -3,5 +3,5 @@
     <string name="app_name">TravelTaipei</string>
     <string name="home_title">Travel Taipei</string>
     <string name="home_news_title">Latest news</string>
-    <string name="home_attraction_title">Tourist Attractions</string>
+    <string name="home_attraction_title">Attractions</string>
 </resources>

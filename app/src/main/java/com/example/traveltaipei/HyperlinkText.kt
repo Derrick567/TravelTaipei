@@ -1,4 +1,4 @@
-package com.example.traveltaipei.home.data.remote
+package com.example.traveltaipei
 
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable

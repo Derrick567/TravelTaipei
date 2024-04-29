@@ -1,6 +1,6 @@
 package com.example
 
-import com.example.traveltaipei.home.data.remote.TravelAPIService
+import com.example.traveltaipei.home.model.remote.TravelAPIService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response

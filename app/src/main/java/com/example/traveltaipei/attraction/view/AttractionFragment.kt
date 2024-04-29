@@ -1,4 +1,4 @@
-package com.example.traveltaipei.home.presentation
+package com.example.traveltaipei.attraction.view
 
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.traveltaipei.R
 import com.example.traveltaipei.home.model.Attraction
+import com.example.traveltaipei.attraction.viewmodel.AttractionViewModel
 
 /**
  * A simple [Fragment] subclass.
