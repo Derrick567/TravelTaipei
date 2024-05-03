@@ -15,13 +15,8 @@ import com.example.traveltaipei.R
 import com.example.traveltaipei.home.model.Attraction
 import com.example.traveltaipei.attraction.viewmodel.AttractionViewModel
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AttractionFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class AttractionFragment : Fragment() {
-    //private var id: Int? = null
     private val viewModel: AttractionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +26,6 @@ class AttractionFragment : Fragment() {
             it.getParcelable<Attraction>("attraction")?.let { attraction ->
                 viewModel.attraction =  attraction
             }
-            Log.d("AttractionFragment", "id = $id")
         }
     }
 
@@ -42,7 +36,6 @@ class AttractionFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         val composeView = view.findViewById<ComposeView>(R.id.compose_view)
         composeView.apply {
-
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 // In Compose world

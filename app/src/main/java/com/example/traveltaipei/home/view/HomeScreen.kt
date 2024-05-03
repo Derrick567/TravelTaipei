@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -49,7 +49,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.traveltaipei.R
-import com.example.traveltaipei.home.model.remote.dto.News
+import com.example.traveltaipei.home.model.News
 import com.example.traveltaipei.home.model.Attraction
 import com.example.traveltaipei.home.viewmodel.HomeViewModel
 import com.example.traveltaipei.ui.theme.Pink40
@@ -57,13 +57,13 @@ import com.example.traveltaipei.ui.theme.PurpleGrey40
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
-               onAttractionNavigate: (Int, Parcelable?) -> Unit
-               , onNewsNavigate: (String) -> Unit) {
+fun HomeScreen(
+    homeViewModel: HomeViewModel = viewModel(),
+    onAttractionNavigate: (Int, Parcelable?) -> Unit, onNewsNavigate: (String) -> Unit
+) {
 
-    val newsList by homeViewModel.news
-    val attractions by homeViewModel.attractions
-    val context = LocalContext.current
+    val newsList by remember {homeViewModel.news}
+    val attractions by remember {homeViewModel.attractions}
     val openLanguageDialog = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -85,7 +85,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
                 actions = {
                     IconButton(onClick = { openLanguageDialog.value = true }) {
                         Icon(
-                            imageVector = Icons.Filled.Settings,
+                            imageVector = Icons.Filled.Menu,
                             contentDescription = "Localized description"
                         )
                     }
@@ -97,7 +97,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
             LanguageDialog(
                 onDismissRequest = { openLanguageDialog.value = false },
                 langs = homeViewModel.langs, currentLanguage = homeViewModel.currentLanguage,
-                onItemClick = {lang ->
+                onItemClick = { lang ->
                     homeViewModel.changeCurrentLanguage(lang)
                     openLanguageDialog.value = false
                     //Toast.makeText(context, lang, Toast.LENGTH_SHORT).show()
@@ -110,16 +110,22 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            item { Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp))}
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                )
+            }
 
             item {
                 ListTitle(stringResource(R.string.home_news_title))
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
 
-            items(newsList) { news ->
+            items(newsList, key = {
+                it.id
+            }) { news ->
                 NewsItem(
                     news = news,
                     onItemClick = {
@@ -133,11 +139,16 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
                 ListTitle(stringResource(R.string.home_attraction_title))
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
-            items(attractions) { attraction ->
+            items(attractions, key = {
+                it.id
+            }) { attraction ->
                 AttractionItem(
                     attraction = attraction,
                     onItemClick = {
-                        onAttractionNavigate(R.id.action_home_fragment_to_attraction_fragment, attraction)
+                        onAttractionNavigate(
+                            R.id.action_home_fragment_to_attraction_fragment,
+                            attraction
+                        )
                     }
                 )
             }
@@ -146,6 +157,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(),
 
 
 }
+
 @Composable
 fun ListTitle(title: String) {
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -295,7 +307,7 @@ fun LanguageDialog(
                 .fillMaxWidth()
                 .height(450.dp),
 
-        ) {
+            ) {
             LazyColumn(modifier = Modifier.padding(16.dp)) {
 
                 item {
@@ -323,7 +335,7 @@ fun LanguageDialog(
                             text = text, modifier = Modifier,
                             style = TextStyle(
                                 color = Color.Black, fontSize = 16.sp,
-                                ), textAlign = TextAlign.Start
+                            ), textAlign = TextAlign.Start
                         )
                     }
 

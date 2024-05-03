@@ -1,6 +1,7 @@
-package com.example.traveltaipei.home.model.remote.dto
+package com.example.traveltaipei.home.model
 
 import android.os.Parcelable
+import com.example.traveltaipei.home.model.remote.dto.Link
 import kotlinx.android.parcel.Parcelize
 import kotlinx.parcelize.RawValue
 

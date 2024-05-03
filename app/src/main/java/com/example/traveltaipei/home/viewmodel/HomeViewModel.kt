@@ -10,13 +10,12 @@ import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import com.example.ApiClient
 import com.example.traveltaipei.home.model.remote.dto.AttractionsResult
-import com.example.traveltaipei.home.model.remote.dto.News
+import com.example.traveltaipei.home.model.News
 import com.example.traveltaipei.home.model.remote.dto.NewsResult
 import com.example.traveltaipei.home.model.Attraction
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Locale
 
 
 class HomeViewModel : ViewModel() {
@@ -43,7 +42,6 @@ class HomeViewModel : ViewModel() {
         private set
 
     init {
-        currentLanguage = Locale.getDefault().language
         getAttractions()
         getNews()
     }
@@ -59,11 +57,10 @@ class HomeViewModel : ViewModel() {
     private fun setLocale(lang: String) {
         val appLocale: LocaleListCompat =
             LocaleListCompat.forLanguageTags(lang)
-        // Call this on the main thread as it may require Activity.restart()
         AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
-    fun getNews() {
+    private fun getNews() {
         val call2 = ApiClient.apiService.getNews(currentLanguage)
         call2.enqueue(object : Callback<NewsResult> {
             override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
@@ -87,7 +84,7 @@ class HomeViewModel : ViewModel() {
         })
     }
 
-    fun getAttractions() {
+    private fun getAttractions() {
         val call = ApiClient.apiService.getAttractions(currentLanguage)
         call.enqueue(object : Callback<AttractionsResult> {
             override fun onResponse(
@@ -96,7 +93,7 @@ class HomeViewModel : ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     val attractionsResult = response.body()
-                    attractionsResult?.attractions?.take(6)?.let {
+                    attractionsResult?.attractions?.take(12)?.let {
                         _attractions.value = it
                     }
 

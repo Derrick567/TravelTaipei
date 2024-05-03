@@ -1,6 +1,7 @@
 package com.example.traveltaipei.home.model
 
 import android.os.Parcelable
+import androidx.compose.runtime.Stable
 import com.example.traveltaipei.home.model.remote.dto.Category
 import com.example.traveltaipei.home.model.remote.dto.Image
 import kotlinx.android.parcel.Parcelize

@@ -70,8 +70,6 @@ fun AttractionScreen(
             )
         },
     ) { innerPadding ->
-
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
