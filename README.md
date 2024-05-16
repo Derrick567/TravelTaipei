@@ -7,6 +7,6 @@ MVVM架構
 JetPack Compose  
 Retrofit2  
 Navigation  
-Fragment 
-Coil 
+Fragment  
+Coil  
 WebView  
